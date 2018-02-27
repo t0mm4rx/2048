@@ -1,6 +1,6 @@
 var grid = [];
 var hasChanged = false;
-var score = 0;
+var score = 0, bestScore = 0;
 
 const TILE_SIZE = 100,
   MARGIN = 10;
@@ -38,6 +38,12 @@ function setup() {
     [0, 0, 0, 0]
   ];
   addTile();
+  if (document.cookie) {
+      if (document.cookie.split("=")[1]) {
+          bestScore = parseInt(document.cookie.split("=")[1]);
+          console.log("Best Score : " + bestScore);
+      }
+  }
 }
 
 function draw() {
@@ -59,7 +65,9 @@ function draw() {
   /*** Score ***/
   fill(255);
   textSize(25);
-  text("Score : " + score, width / 2, height - 55);
+  text("Score : " + score, width / 2, height - 75);
+  textSize(20);
+  text("Best : " + bestScore, width / 2, height - 55);
   textSize(20);
   text("Press r to restart", width / 2, height - 25);
 }
@@ -166,6 +174,10 @@ function combineDown() {
             grid[x][y] = grid[x][y] * 2;
             grid[x][y + 1] = 0;
             score += grid[x][y] * 2;
+            if (score > bestScore) {
+              document.cookie = "record=" + score;
+              bestScore = score;
+            }
           }
         }
       }
@@ -198,6 +210,10 @@ function combineUp() {
             grid[x][y] = grid[x][y] * 2;
             grid[x][y - 1] = 0;
             score += grid[x][y] * 2;
+            if (score > bestScore) {
+              document.cookie = "record=" + score;
+              bestScore = score;
+            }
           }
         }
       }
@@ -246,6 +262,10 @@ function combineLeft() {
             grid[x][y] = grid[x][y] * 2;
             grid[x + 1][y] = 0;
             score += grid[x][y] * 2;
+            if (score > bestScore) {
+              document.cookie = "record=" + score;
+              bestScore = score;
+            }
           }
         }
       }
@@ -278,6 +298,10 @@ function combineRight() {
             grid[x][y] = grid[x][y] * 2;
             grid[x - 1][y] = 0;
             score += grid[x][y] * 2;
+            if (score > bestScore) {
+              document.cookie = "record=" + score;
+              bestScore = score;
+            }
           }
         }
       }
