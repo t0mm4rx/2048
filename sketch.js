@@ -1,6 +1,8 @@
 var grid = [];
 var hasChanged = false;
-var score = 0, bestScore = 0;
+var score = 0,
+  bestScore = 0;
+var touch;
 
 const TILE_SIZE = 100,
   MARGIN = 10;
@@ -39,10 +41,10 @@ function setup() {
   ];
   addTile();
   if (document.cookie) {
-      if (document.cookie.split("=")[1]) {
-          bestScore = parseInt(document.cookie.split("=")[1]);
-          console.log("Best Score : " + bestScore);
-      }
+    if (document.cookie.split("=")[1]) {
+      bestScore = parseInt(document.cookie.split("=")[1]);
+      console.log("Best Score : " + bestScore);
+    }
   }
 }
 
@@ -306,5 +308,32 @@ function combineRight() {
         }
       }
     }
+  }
+}
+
+function touchStarted() {
+  touch = createVector(mouseX, mouseY);
+}
+
+function touchEnded() {
+  if (touch) {
+    let end = createVector(mouseX, mouseY);
+    if (touch.dist(end) > 30) {
+      let vec = end.sub(touch);
+      let angle = vec.heading() * 180 / Math.PI + 180;
+      if (angle > 45 && angle < 135) {
+        slide(dirs.UP);
+      }
+      if (angle > 135 && angle < 225) {
+        slide(dirs.RIGHT);
+      }
+      if (angle > 225 && angle < 315) {
+        slide(dirs.DOWN);
+      }
+      if ((angle > 315 && angle < 360) || (angle > 0 && angle < 45)) {
+        slide(dirs.LEFT);
+      }
+    }
+    touch = null;
   }
 }
